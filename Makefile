@@ -2,7 +2,7 @@ BUTOOL_PATH?=../../
 
 CXX?=g++
 
-IPBUS_REG_HELPER_PATH?=${BUTOOL_PATH}/plugins/butool-ipbus-helpers
+IPBUS_REG_HELPER_PATH?=${BUTOOL_PATH}/plugins/BUTool-IPBUS-Helpers
 
 LIBRARY_GENERIC_IPBUS_DEVICE = lib/libBUTool_GenericIPBusDevice.so
 LIBRARY_GENERIC_IPBUS_DEVICE_SOURCES = $(wildcard src/GenericIPBus_device/*.cc)
