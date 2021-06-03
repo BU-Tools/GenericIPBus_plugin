@@ -103,6 +103,7 @@ void GenericIPBusDevice::LoadCommandList(){
 
 CommandReturn::status GenericIPBusDevice::DumpDebug(std::vector<std::string> /*strArg*/,
 						std::vector<uint64_t> /*intArg*/){
+/*
   std::stringstream outfileName;
   outfileName << "Apollo_debug_dump_";  
 
@@ -117,6 +118,7 @@ CommandReturn::status GenericIPBusDevice::DumpDebug(std::vector<std::string> /*s
   std::ofstream outfile(outfileName.str().c_str(),std::ofstream::out);
   outfile << outfileName.str() << std::endl;
   SM->DebugDump(outfile);
-  outfile.close();  
+  outfile.close();
+*/
   return CommandReturn::OK;
 }

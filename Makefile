@@ -46,11 +46,15 @@ LIBRARIES =    	-lcurses \
 
 INSTALL_PATH ?= ./install
 
-
+INSTALL_PATH ?= ./install
 
 CXX_FLAGS = -std=c++11 -g -O3 -rdynamic -Wall -MMD -MP -fPIC ${INCLUDE_PATH} -Werror -Wno-literal-suffix
 
 CXX_FLAGS +=-fno-omit-frame-pointer -Wno-ignored-qualifiers -Werror=return-type -Wextra -Wno-long-long -Winit-self -Wno-unused-local-typedefs  -Woverloaded-virtual ${COMPILETIME_ROOT} ${FALLTHROUGH_FLAGS}
+
+ifdef MAP_TYPE
+CXX_FLAGS += ${MAP_TYPE}
+endif
 
 LINK_LIBRARY_FLAGS = -shared -fPIC -Wall -g -O3 -rdynamic ${LIBRARY_PATH} ${LIBRARIES} -Wl,-rpath=$(RUNTIME_LDPATH)/lib ${COMPILETIME_ROOT}
 
@@ -150,6 +154,13 @@ bin/% : obj/standalone/%.o
 	mkdir -p bin
 	${CXX} ${LINK_EXE_FLAGS} ${UHAL_LIBRARY_FLAGS} ${UHAL_LIBRARIES} -lBUTool_GenericIPBus -lboost_system -lpugixml ${EXE_GENERIC_IPBUS_STANDALONE_OBJECT_FILES} $^ -o $@
 
+
+# -------------------
+# Install
+# -------------------
+install: all
+	install -m 775 -d ${INSTALL_PATH}/lib
+	install -b -m 775 ./lib/* ${INSTALL_PATH}/lib
 
 -include $(LIBRARY_OBJECT_FILES:.o=.d)
 
