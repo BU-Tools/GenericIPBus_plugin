@@ -19,7 +19,7 @@
 
 namespace BUTool{
   
-  class GenericIPBusDevice: public CommandList<GenericIPBusDevice>, private IPBusRegHelper{
+  class GenericIPBusDevice: public CommandList<GenericIPBusDevice>, public IPBusRegHelper{
   public:
     GenericIPBusDevice(std::vector<std::string> arg); 
     ~GenericIPBusDevice();
