@@ -59,9 +59,9 @@ ifdef MAP_TYPE
 CXX_FLAGS += ${MAP_TYPE}
 endif
 
-LINK_LIBRARY_FLAGS = -shared -fPIC -Wall -g -O3 -rdynamic ${LIBRARY_PATH} ${LIBRARIES} -Wl,-rpath=$(RUNTIME_LDPATH)/lib ${COMPILETIME_ROOT}
+LINK_LIBRARY_FLAGS = -shared -Wl,--no-as-needed -fPIC -Wall -g -O3 -rdynamic ${LIBRARY_PATH} ${LIBRARIES} -Wl,-rpath=$(RUNTIME_LDPATH)/lib ${COMPILETIME_ROOT}
 
-LINK_EXE_FLAGS = -Wall -g -O3 -rdynamic ${LIBRARY_PATH} ${LIBRARIES} \
+LINK_EXE_FLAGS = -Wall -g -O3 -Wl,--no-as-needed -rdynamic ${LIBRARY_PATH} ${LIBRARIES} \
 	         -L${COMPILETIME_ROOT}/lib/ -lBUTool_Helpers \
 		 -Wl,-rpath=$(RUNTIME_LDPATH)/lib ${COMPILETIME_ROOT} 
 
