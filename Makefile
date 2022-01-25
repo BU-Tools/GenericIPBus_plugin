@@ -1,3 +1,5 @@
+SHELL = bash
+
 BUTOOL_PATH?=../../
 
 CXX?=g++
@@ -20,12 +22,12 @@ EXE_GENERIC_IPBUS_STANDALONE_OBJECT_FILES += $(patsubst src/%.cc,obj/%.o,${EXE_G
 
 
 
-INCLUDE_PATH = \
+INCLUDE_PATH += \
 							-Iinclude  \
 							-I$(BUTOOL_PATH)/include \
 							-I$(IPBUS_REG_HELPER_PATH)/include
 
-LIBRARY_PATH = \
+LIBRARY_PATH += \
 							-Llib \
 							-L$(BUTOOL_PATH)/lib \
 							-L$(IPBUS_REG_HELPER_PATH)/lib
@@ -41,19 +43,25 @@ LIBRARIES =    	-lcurses \
 		-lToolException	\
 		-lBUTool_IPBusIO \
 		-lBUTool_IPBusStatus \
+		-lBUTool_BUTextIO \
 		-lboost_regex \
 		-lboost_filesystem
 
+INSTALL_PATH ?= ./install
 
-
+INSTALL_PATH ?= ./install
 
 CXX_FLAGS = -std=c++11 -g -O3 -rdynamic -Wall -MMD -MP -fPIC ${INCLUDE_PATH} -Werror -Wno-literal-suffix
 
 CXX_FLAGS +=-fno-omit-frame-pointer -Wno-ignored-qualifiers -Werror=return-type -Wextra -Wno-long-long -Winit-self -Wno-unused-local-typedefs  -Woverloaded-virtual ${COMPILETIME_ROOT} ${FALLTHROUGH_FLAGS}
 
-LINK_LIBRARY_FLAGS = -shared -fPIC -Wall -g -O3 -rdynamic ${LIBRARY_PATH} ${LIBRARIES} -Wl,-rpath=$(RUNTIME_LDPATH)/lib ${COMPILETIME_ROOT}
+ifdef MAP_TYPE
+CXX_FLAGS += ${MAP_TYPE}
+endif
 
-LINK_EXE_FLAGS = -Wall -g -O3 -rdynamic ${LIBRARY_PATH} ${LIBRARIES} \
+LINK_LIBRARY_FLAGS = -shared -Wl,--no-as-needed -fPIC -Wall -g -O3 -rdynamic ${LIBRARY_PATH} ${LIBRARIES} -Wl,-rpath=$(RUNTIME_LDPATH)/lib ${COMPILETIME_ROOT}
+
+LINK_EXE_FLAGS = -Wall -g -O3 -Wl,--no-as-needed -rdynamic ${LIBRARY_PATH} ${LIBRARIES} \
 	         -L${COMPILETIME_ROOT}/lib/ -lBUTool_Helpers \
 		 -Wl,-rpath=$(RUNTIME_LDPATH)/lib ${COMPILETIME_ROOT} 
 
@@ -82,7 +90,7 @@ UHAL_INCLUDE_PATH = \
 	         					-isystem$(CACTUS_ROOT)/include 
 
 UHAL_LIBRARY_PATH = \
-							-L$(CACTUS_ROOT)/lib 
+							-L$(CACTUS_ROOT)/lib  -Wl,-rpath=$(CACTUS_ROOT)/lib
 endif
 
 UHAL_CXX_FLAGHS = ${UHAL_INCLUDE_PATH}
@@ -127,6 +135,14 @@ ${LIBRARY_GENERIC_IPBUS}: ${LIBRARY_GENERIC_IPBUS_OBJECT_FILES} ${IPBUS_REG_HELP
 	${CXX} ${LINK_LIBRARY_FLAGS}  ${LIBRARY_GENERIC_IPBUS_OBJECT_FILES} -o $@
 
 
+# -----------------------
+# install
+# -----------------------
+install: all
+	 install -m 775 -d ${INSTALL_PATH}/lib
+	 install -b -m 775 ./lib/* ${INSTALL_PATH}/lib
+
+
 obj/%.o : src/%.cc
 	mkdir -p $(dir $@)
 	mkdir -p {lib,obj}
@@ -141,6 +157,13 @@ bin/% : obj/standalone/%.o
 	mkdir -p bin
 	${CXX} ${LINK_EXE_FLAGS} ${UHAL_LIBRARY_FLAGS} ${UHAL_LIBRARIES} -lBUTool_GenericIPBus -lboost_system -lpugixml ${EXE_GENERIC_IPBUS_STANDALONE_OBJECT_FILES} $^ -o $@
 
+
+# -------------------
+# Install
+# -------------------
+install: all
+	install -m 775 -d ${INSTALL_PATH}/lib
+	install -b -m 775 ./lib/* ${INSTALL_PATH}/lib
 
 -include $(LIBRARY_OBJECT_FILES:.o=.d)
 
