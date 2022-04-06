@@ -2,6 +2,7 @@
 #define __GENERIC_IPBUS_HH__
 
 #include <IPBusIO/IPBusConnection.hh>
+#include <IPBusIO/IPBusIO.hh>
 #include <BUException/ExceptionBase.hh>
 
 
@@ -10,9 +11,10 @@
 
 #include <stdint.h>
 
-class GenericIPBus : public IPBusConnection{
+class GenericIPBus : public IPBusConnection,
+		     public IPBusIO{
 public:
-  GenericIPBus(); //User should call Connect inhereted from IPBusConnection
+  GenericIPBus(std::vector<std::string> const & args);
   ~GenericIPBus();
 
   //The IPBus connection and read/write functions come from the IPBusConnection class.
