@@ -23,7 +23,7 @@ GenericIPBusDevice::GenericIPBusDevice(std::vector<std::string> arg)
   : CommandList<GenericIPBusDevice>("GenericIPBus"),
     GenericIPBusHolder(arg),
     IPBusRegHelper(std::static_pointer_cast<IPBusIO>(SM),
-		   BUTool::RegisterHelper::TextIO){
+		   BUTool::CommandListBase::TextIO){
 
   //setup commands
   LoadCommandList();
