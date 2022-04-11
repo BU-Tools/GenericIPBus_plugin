@@ -42,6 +42,7 @@ endif
 LIBRARIES =    	-lcurses \
 		-lToolException	\
 		-lBUTool_IPBusIO \
+		-lBUTool_IPBusRegHelpers \
 		-lBUTool_IPBusStatus \
 		-lBUTool_IPBusRegHelpers \
 		-lBUTool_BUTextIO \
