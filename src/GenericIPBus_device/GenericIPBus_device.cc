@@ -59,7 +59,11 @@ void GenericIPBusDevice::LoadCommandList(){
 	       &GenericIPBusDevice::RegisterAutoComplete);
     AddCommandAlias("ro","readoffset");
 
-
+	AddCommand("readconvert",&GenericIPBusDevice::ReadConvert,
+	     "Read and convert register\n" \
+	     "Usage: \n"                           \
+	     "  readconvert reg\n",
+	     &GenericIPBusDevice::RegisterAutoComplete);
 
     AddCommand("write",&GenericIPBusDevice::Write,
 	       "Write to GenericIPBus\n"           \
