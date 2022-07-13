@@ -18,8 +18,25 @@
 #include <GenericIPBus/GenericIPBus.hh>
 
 namespace BUTool{
+
+  //This holder class is used to force the GenericIPBus class that would normally
+  //be in the GenericIPBusDevice class to be initialized before the IPBusRegHelper
+  //so that it can be past to the IPBusRegHelper's constructor. 
+  class GenericIPBusHolder{
+  public:
+    GenericIPBusHolder(std::vector<std::string> const & arg){
+      SM = std::make_shared<GenericIPBus>(arg);
+    };
+  protected:
+    std::shared_ptr<GenericIPBus> SM;
+  private:
+    GenericIPBusHolder();
+  };
+
   
-  class GenericIPBusDevice: public CommandList<GenericIPBusDevice>, public IPBusRegHelper{
+  class GenericIPBusDevice: public CommandList<GenericIPBusDevice>,
+			    public GenericIPBusHolder,
+			    public IPBusRegHelper{
   public:
     GenericIPBusDevice(std::vector<std::string> arg); 
     ~GenericIPBusDevice();
@@ -28,7 +45,6 @@ namespace BUTool{
 
 
   private:
-    GenericIPBus * SM;
 
     //Here is where you update the map between string and function
     void LoadCommandList();
