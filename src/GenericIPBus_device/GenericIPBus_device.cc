@@ -21,24 +21,15 @@ using namespace BUTool;
 
 GenericIPBusDevice::GenericIPBusDevice(std::vector<std::string> arg)
   : CommandList<GenericIPBusDevice>("GenericIPBus"),
-    IPBusRegHelper(){
-  //Set case sensistive
-  SetCase(RegisterHelper::RegisterNameCase::CASE_SENSITIVE);
-  SM = new GenericIPBus();
-  SM->Connect(arg);
-  SetHWInterface(SM->GetHWInterface()); //Pass the inherited version of IPBusIO inside of IPBusREgHelper a pointer to the real hw interface
+    GenericIPBusHolder(arg),
+    IPBusRegHelper(std::static_pointer_cast<IPBusIO>(SM),
+		   BUTool::CommandListBase::TextIO){
 
-  // setup RegisterHelper's BUTextIO pointer
-  SetupTextIO();
-  
   //setup commands
   LoadCommandList();
 }
 
 GenericIPBusDevice::~GenericIPBusDevice(){
-  if(NULL != SM){
-    delete SM;
-  }
 }
 
   
@@ -68,7 +59,11 @@ void GenericIPBusDevice::LoadCommandList(){
 	       &GenericIPBusDevice::RegisterAutoComplete);
     AddCommandAlias("ro","readoffset");
 
-
+	AddCommand("readconvert",&GenericIPBusDevice::ReadConvert,
+	     "Read and convert register\n" \
+	     "Usage: \n"                           \
+	     "  readconvert reg\n",
+	     &GenericIPBusDevice::RegisterAutoComplete);
 
     AddCommand("write",&GenericIPBusDevice::Write,
 	       "Write to GenericIPBus\n"           \
