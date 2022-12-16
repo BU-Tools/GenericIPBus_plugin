@@ -57,13 +57,6 @@ namespace BUTool{
     CommandReturn::status DumpDebug(std::vector<std::string>,std::vector<uint64_t>);
 
   };
-  RegisterDevice(GenericIPBusDevice,
-		 "GenericIPBus",
-		 "file/SM_SN",
-		 "g",
-		 "GenericIPBus",
-		 "\"connection file\"  or \"SM_SN\""
-		 ); //Register GenericIPBusDevice with the DeviceFactory  
 }
 
 #endif

@@ -30,3 +30,4 @@ lib/*
 env.sh
 doc/html
 bin
+src/GenericIPBus_device/Version.cc
