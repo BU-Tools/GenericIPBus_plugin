@@ -1,5 +1,8 @@
 SHELL = bash
 
+defaut:build
+include mk/version.mk
+
 BUTOOL_PATH?=../../
 
 CXX?=g++
@@ -8,6 +11,7 @@ IPBUS_REG_HELPER_PATH?=${BUTOOL_PATH}/plugins/BUTool-IPBUS-Helpers
 
 LIBRARY_GENERIC_IPBUS_DEVICE = lib/libBUTool_GenericIPBusDevice.so
 LIBRARY_GENERIC_IPBUS_DEVICE_SOURCES = $(wildcard src/GenericIPBus_device/*.cc)
+LIBRARY_GENERIC_IPBUS_DEVICE_SOURCES += $(VERSION_FILE)
 LIBRARY_GENERIC_IPBUS_DEVICE_OBJECT_FILES = $(patsubst src/%.cc,obj/%.o,${LIBRARY_GENERIC_IPBUS_DEVICE_SOURCES})
 
 LIBRARY_GENERIC_IPBUS = lib/libBUTool_GenericIPBus.so
@@ -105,7 +109,7 @@ UHAL_LIBRARY_FLAGS = ${UHAL_LIBRARY_PATH}
 .PHONY: all _all clean _cleanall build _buildall _cactus_env
 
 default: build
-clean: _cleanall
+clean: _cleanall clean_version
 _cleanall:
 	rm -rf obj
 	rm -rf bin

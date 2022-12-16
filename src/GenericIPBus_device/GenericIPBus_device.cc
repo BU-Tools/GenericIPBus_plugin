@@ -19,6 +19,18 @@
 
 using namespace BUTool;
 
+#include <GenericIPBus_device/Version.hh>
+RegisterDevice(GenericIPBusDevice,
+	       "GenericIPBus",
+	       "file/SM_SN",
+	       "g",
+	       "GenericIPBus",
+	       "\"connection file\"  or \"SM_SN\"",
+	       VersionTracker(nVer,std::string(sVer),std::string(uri))
+	       ); //Register GenericIPBusDevice with the DeviceFactory  
+
+
+
 GenericIPBusDevice::GenericIPBusDevice(std::vector<std::string> arg)
   : CommandList<GenericIPBusDevice>("GenericIPBus"),
     GenericIPBusHolder(arg),
@@ -120,3 +132,5 @@ CommandReturn::status GenericIPBusDevice::DumpDebug(std::vector<std::string> /*s
 */
   return CommandReturn::OK;
 }
+
+
